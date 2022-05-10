@@ -1,0 +1,20 @@
+# use to setup dev environment
+version: "3.9"
+services:
+  ffrd-ui:
+    container_name: FFRD_UI_DEV
+    # build:
+    #   context: .
+    #   dockerfile: dev.Dockerfile
+    image: node:18.1-alpine3.14
+    ports:
+      # host:container
+      - 3100:3000
+      # this one is for live reload - looks like a static port
+      - 35729:35729
+    volumes:
+      - .:/workspaces/ffrd-ui
+    # env_file:
+    #   - .devcontainer/devcontainer.ui.env
+    working_dir: /workspaces/ffrd-ui
+    tty: true
