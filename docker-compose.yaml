@@ -9,9 +9,11 @@ services:
     image: node:18.1-alpine3.14
     ports:
       # host:container
-      - 3100:3000
+      - 3000:3000
       # this one is for live reload - looks like a static port
-      - 35729:35729
+      # - 35729:35729
+      # default for vite/sveltekit
+      - 24678:24678
     volumes:
       - .:/workspaces/ffrd-ui
     # env_file:
