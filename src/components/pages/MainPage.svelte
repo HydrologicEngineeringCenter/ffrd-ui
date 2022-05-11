@@ -1,6 +1,6 @@
 <script lang="ts">
-  import MainPageButton from "../MainPageButton.svelte";
-  import NavBar from "../NavBar.svelte";
+  import MainPageButton from "../items/MainPageButton.svelte";
+  import NavBar from "../items/NavBar.svelte";
   // int -> px
 </script>
 

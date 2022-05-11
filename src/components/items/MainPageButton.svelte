@@ -1,8 +1,8 @@
 <script lang="ts">
-  import HoverAction from "./animations/HoverAction/HoverAction.svelte";
+  import HoverAction from "../animations/HoverAction/HoverAction.svelte";
 </script>
 
-<div class="w-1/3 px-5">
+<div class="w-1/3 px-10">
   <HoverAction animationParams={{ scale: 1.1 }}>
     <div
       class="flex justify-center items-center content-start bg-gray-400 h-44 px-1 rounded-lg"
