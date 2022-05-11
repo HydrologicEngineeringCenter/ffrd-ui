@@ -1,8 +1,8 @@
 export type AnimationParams = {
-  scale: number;
-  rotation: number;
-  x: number;
-  y: number;
+  scale?: number;
+  rotation?: number;
+  x?: number;
+  y?: number;
 }
 
 export type BoopParams = {
@@ -12,9 +12,8 @@ export type BoopParams = {
   isBooped: boolean;
 }
 
-export type MouseHoverParams = {
+export type HoverParams = {
   animationParams: AnimationParams;
-  timing: number;
   setter: (v: boolean) => void;
   isMouseHovering: boolean;
 }
