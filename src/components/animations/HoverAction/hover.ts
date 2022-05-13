@@ -1,5 +1,5 @@
 import { spring } from 'svelte/motion';
-import type { HoverParams } from '../../../types';
+import type { HoverParams } from './types';
 
 function getPrefersReducedMotion() {
   const QUERY = '(prefers-reduced-motion: no-preference)';

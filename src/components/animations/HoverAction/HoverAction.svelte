@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { AnimationParams } from "../../../types/index.js";
+  import type { AnimationParams } from "./types";
 
   import hover from "./hover.js";
   export let animationParams: AnimationParams;
@@ -9,7 +9,6 @@
   function setMouseMotion(val: boolean) {
     mouseHovering = val;
   }
-
 </script>
 
 <!-- trigger onclick so demo works on mobile -->
