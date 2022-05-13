@@ -1,4 +1,3 @@
-# use to setup dev environment
 version: "3.9"
 services:
   ffrd-ui:
@@ -18,5 +17,26 @@ services:
       - .:/workspaces/ffrd-ui
     # env_file:
     #   - .devcontainer/devcontainer.ui.env
+    environment:
+      - SVELTE_APP_KEYCLOAK_HOST=host.docker.internal:8443
+      - SVELTE_APP_KEYCLOAK_REALM=ffrd
+      - SVELTE_APP_KEYCLOAK_CLIENT=ffrd-ui
+      - SVELTE_APP_KEYCLOAK_CLIENT_SECRET=
+      - SVELTE_APP_BASEPATH=ffrd-ui
     working_dir: /workspaces/ffrd-ui
     tty: true
+
+  auth:
+    image: jboss/keycloak:16.1.1
+    container_name: KEYCLOAK_FFRD_DEV
+    command: ["-Djboss.http.port=8080","-Dkeycloak.migration.strategy=IGNORE_EXISTING"]
+    environment:
+      - DB_VENDOR=h2
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+      - PROXY_ADDRESS_FORWARDING=true
+    ports:
+      - 8080:8080
+      - 8443:8443
+    volumes:
+      - ./kdata:/opt/jboss/keycloak/standalone/data
