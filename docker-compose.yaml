@@ -20,8 +20,8 @@ services:
     environment:
       - SVELTE_APP_KEYCLOAK_HOST=host.docker.internal:8443
       - SVELTE_APP_KEYCLOAK_REALM=ffrd
-      - SVELTE_APP_KEYCLOAK_CLIENT=ffrd-ui
-      - SVELTE_APP_KEYCLOAK_CLIENT_SECRET=
+      - SVELTE_APP_KEYCLOAK_CLIENTID=ffrd-ui
+      - SVELTE_APP_KEYCLOAK_CLIENTSECRET=
       - SVELTE_APP_BASEPATH=ffrd-ui
     working_dir: /workspaces/ffrd-ui
     tty: true
