@@ -1,22 +1,22 @@
 <script lang="ts">
-  import MainPage from "../components/pages/MainPage.svelte";
-  import authStore from "../stores/auth";
-  import type { AuthToken } from "$lib/types";
+  import MainPage from "$lib/pages/MainPage.svelte";
+  import { auth_token, auth_keycloak } from "$lib/stores/auth";
   import { goto } from "$app/navigation";
-  import { onDestroy, onMount } from "svelte";
+  import { beforeUpdate, onMount } from "svelte";
+  import { base } from "$app/paths";
 
-  // auth redirect
-  let authToken: AuthToken;
-  const unsubscribe = authStore.subscribe((v) => {
-    authToken = v.authToken;
+  // auth redirect - TODO uncomment this in production
+  beforeUpdate(() => {
+    $auth_keycloak.checkForSession();
+    // if (!$auth_token.jwt) {
+    //   goto(base);
+    // }
   });
-  // memory leak if left subscribed
-  onDestroy(unsubscribe);
-  onMount(() => {
-    if (!authToken.jwt) {
-      goto("/disclaimer");
-    }
-  });
+  onMount(() => {});
 </script>
 
-<MainPage />
+<!-- don't show anything if not login -->
+{#if $auth_token.jwt}
+  <MainPage />
+  $auth_token
+{/if}

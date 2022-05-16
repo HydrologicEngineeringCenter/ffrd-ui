@@ -18,10 +18,11 @@ services:
     # env_file:
     #   - .devcontainer/devcontainer.ui.env
     environment:
-      - SVELTE_APP_KEYCLOAK_HOST=host.docker.internal:8443
+      - SVELTE_APP_KEYCLOAK_HOST=http://host.docker.internal:8080/auth
       - SVELTE_APP_KEYCLOAK_REALM=ffrd
       - SVELTE_APP_KEYCLOAK_CLIENTID=ffrd-ui
       - SVELTE_APP_KEYCLOAK_CLIENTSECRET=
+      - SVELTE_APP_KEYCLOAK_REDIRECT=http://host.docker.internal:3000/ffrd-ui/splash
       - SVELTE_APP_BASEPATH=ffrd-ui
     working_dir: /workspaces/ffrd-ui
     tty: true

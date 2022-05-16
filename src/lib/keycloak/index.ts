@@ -3,11 +3,11 @@ import type { KeycloakConfig } from "./types";
 function urlencodeFormData(fd: FormData) { return new URLSearchParams(fd as any) }
 
 class Keycloak {
-  accessToken: Nullable<string>;
-  refreshToken: Nullable<string>;
-  identityToken: Nullable<string>;
+  accessToken?: string;
+  refreshToken?: string;
+  identityToken?: string;
   config: KeycloakConfig;
-  authCallback: (accessToken: Nullable<string>) => void;
+  authCallback: (accessToken?: string) => void;
   tokenCallback: (t: string) => void;
   errCallback: (res: any) => void;
   sessionEndWarning: number;
@@ -17,9 +17,9 @@ class Keycloak {
   sessionState: Nullable<string>;
 
   constructor(config: KeycloakConfig) {
-    this.accessToken = null;
-    this.refreshToken = null;
-    this.identityToken = null;
+    this.accessToken = undefined;
+    this.refreshToken = undefined;
+    this.identityToken = undefined;
     this.config = config;
     this.authCallback = config.onAuthenticate;
     this.tokenCallback = config.onGetToken;
@@ -49,14 +49,13 @@ class Keycloak {
    */
   authenticate() {
     let url = `${this.config.keycloakUrl}/realms/${this.config.realm}/protocol/openid-connect/auth?response_type=code&client_id=${this.config.client}&scope=openid&nocache=${(new Date()).getTime()}&redirect_uri=${this.config.redirectUrl}`
-    // let url = `${this.config.keycloakUrl}/realms/${this.config.realm}/protocol/openid-connect/auth?response_type=code&client_id=${this.config.client}&scope=openid&nocache=${(new Date()).getTime()}`
     window.location.href = url;
   }
 
   checkForSession() {
     const urlParams = new URLSearchParams(window.location.search);
     this.code = urlParams.get('code');
-    this.sessionState = urlParams.get('sessionState');
+    this.sessionState = urlParams.get('session_state');
     if (this.code && this.sessionState) {
       this.codeFlowAuth();
       window.history.pushState(null, "", document.location.pathname);
@@ -79,34 +78,30 @@ class Keycloak {
     xhr.onload = function() {
       switch (xhr.status) {
         case (400): // 400 - bad request
-          self.accessToken = null;
-          self.refreshToken = null;
+          self.accessToken = undefined;
+          self.refreshToken = undefined;
           resp = JSON.parse(xhr.responseText);
           self.errCallback(resp);
           break;
 
         case 200:
           let keycloakResp: {
-            access_token: Nullable<string>;
-            identity_token: Nullable<string>;
-            refresh_token: Nullable<string>;
+            access_token: string;
+            identity_token: string;
+            refresh_token: string;
             refresh_expires_in: number;
-          } = {
-            access_token: null,
-            identity_token: null,
-            refresh_token: null,
-            refresh_expires_in: 0,
-          }
+          };
           try {
             keycloakResp = JSON.parse(xhr.responseText);
           }
           catch (err) {
-            console.log(`Error parsing authentication token: ${err}`)
+            console.error(`Error parsing authentication token: ${err}`)
+            return
           }
           self.accessToken = keycloakResp.access_token;
           self.identityToken = keycloakResp.identity_token;
           const remainingTime = keycloakResp.refresh_expires_in;
-          if (remainingTime <= self.sessionEndWarning) {
+          if (remainingTime && remainingTime <= self.sessionEndWarning) {
             if (self.sessionEndingCallback)
               self.sessionEndingCallback(remainingTime);
           }
@@ -141,13 +136,12 @@ class Keycloak {
     data.append('grant_type', 'authorization_code');
     data.append('client_id', this.config.client);
     data.append('client_secret', this.config.clientSecret); // required depending on keycloak client authentication config
-    console.log(this.config.redirectUrl)
     data.append('redirect_uri', this.config.redirectUrl);
 
     this.fetchToken(data);
   }
 
-  refresh(refreshToken: Nullable<string>) {
+  refresh(refreshToken: string) {
     console.log("refreshing token");
     var data = new FormData();
     data.append('refresh_token', refreshToken ? refreshToken : "");
