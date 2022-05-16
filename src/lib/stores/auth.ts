@@ -65,6 +65,7 @@ function processTokenResponse(token?: string) {
     }
   } else {
     newAuth = JSON.parse(window.atob(token.split(".")[1]))
+    newAuth.jwt = token
   }
   auth_token.set(newAuth)
 }

@@ -6,17 +6,15 @@
   import { base } from "$app/paths";
 
   // auth redirect - TODO uncomment this in production
-  beforeUpdate(() => {
+  onMount(() => {
     $auth_keycloak.checkForSession();
-    // if (!$auth_token.jwt) {
-    //   goto(base);
-    // }
+    if (!$auth_token.jwt) {
+      goto(base);
+    }
   });
-  onMount(() => {});
 </script>
 
 <!-- don't show anything if not login -->
 {#if $auth_token.jwt}
   <MainPage />
-  $auth_token
 {/if}
