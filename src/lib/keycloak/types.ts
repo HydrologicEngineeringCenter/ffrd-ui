@@ -1,4 +1,4 @@
-import type Keycloak from "./keycloak";
+import type Keycloak from "./index";
 
 export type KeycloakConfig = {
   keycloakUrl: string;
